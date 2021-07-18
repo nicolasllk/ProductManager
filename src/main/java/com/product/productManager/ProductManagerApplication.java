@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication
-@ComponentScan(basePackages = "com.product.productManager")
+@SpringBootApplication(scanBasePackages = "com.product.productManager")
 @EnableJpaRepositories("com.product.productManager.domain.repository")
 public class ProductManagerApplication {
 
