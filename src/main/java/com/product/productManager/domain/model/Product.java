@@ -1,19 +1,35 @@
 package com.product.productManager.domain.model;
 
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Product {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+
+    @NotNull
+    @Size(min = 3, max = 50)
     private String name;
+
+    @NotNull
+    @Size(min = 3, max = 150)
     private String description;
+
+    @NotNull
     private Double weight;
+
+    @NotNull
     private Double price;
+
+    @NotNull
+    @Size(min = 3, max = 30)
     private String country;
 
     public Product() {
@@ -73,5 +89,16 @@ public class Product {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", weight=" + weight +
+                ", price=" + price +
+                ", country='" + country + '\'' +
+                '}';
     }
 }
