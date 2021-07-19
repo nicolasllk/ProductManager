@@ -4,6 +4,9 @@ import com.product.productManager.domain.model.Product;
 import com.product.productManager.domain.repository.ProductRepository;
 import com.product.productManager.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +23,12 @@ public class ProductService {
                 orElseThrow(() -> new ProductNotFoundException("Product id: " + id +" not found."));
     }
 
-    public List<Product> getAll() {
+    public List<Product> getAllPagedAndSorted(int page, int size, String order) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromOptionalString(order).get(), "name");
+        return productRepository.findAll(pageable).getContent();
+    }
+
+    public List<Product> getAllPagedAndSorted() {
         return Streamable.of(productRepository.findAll()).toList();
     }
 
@@ -36,12 +44,19 @@ public class ProductService {
         Product updatableProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Unable to update product id " +id+ ". Product not found."));
 
-        updatableProduct.setName(newProduct.getName());
-        updatableProduct.setDescription(newProduct.getDescription());
-        updatableProduct.setPrice(newProduct.getPrice());
-        updatableProduct.setWeight(newProduct.getWeight());
+        updateProduct(newProduct, updatableProduct);
 
         return productRepository.save(updatableProduct);
     }
 
+    public List<Product> getProductByName(String name) {
+        return productRepository.findByName(name);
+    }
+
+    private void updateProduct(Product newProduct, Product updatableProduct) {
+        updatableProduct.setName(newProduct.getName());
+        updatableProduct.setDescription(newProduct.getDescription());
+        updatableProduct.setPrice(newProduct.getPrice());
+        updatableProduct.setWeight(newProduct.getWeight());
+    }
 }

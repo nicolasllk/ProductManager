@@ -20,9 +20,19 @@ public class ProductController {
         return productService.getProduct(id);
     }
 
-    @GetMapping( produces = "application/json")
+    @GetMapping( params = { "page", "size", "order" }, produces = "application/json")
+    public List<Product> getProduct(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam String order){
+        return productService.getAllPagedAndSorted(page, size, order);
+    }
+
+    @GetMapping( value = "/name/{name}", produces = "application/json")
+    public List<Product> getProductByName(@PathVariable String name) {
+        return productService.getProductByName(name);
+    }
+
+    @GetMapping(  produces = "application/json")
     public List<Product> getProduct(){
-        return productService.getAll();
+        return productService.getAllPagedAndSorted();
     }
 
     @PostMapping(produces = "application/json")

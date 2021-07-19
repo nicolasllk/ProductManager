@@ -26,11 +26,10 @@ public class ProductServiceTest {
         productRepository.deleteAll();
     }
 
-    @org.junit.Test
+    @Test
     public void testNotNullRepository(){
         Assert.assertNotNull(productRepository);
     }
-
 
     @Test
     public void testGetProduct() {
@@ -42,15 +41,15 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getAll() {
+    public void teatGetAll() {
         Product product = productRepository.save(new Product("Iphone X", "Used iphone with some scratches", 8.04, 300.99, "United States" ));
         Product product2 = productRepository.save(new Product("Iphone XI", "Used iphone Brand New", 9.04, 400.99, "United States" ));
 
-        productService.getAll().forEach(dbProduct -> Assert.assertTrue(dbProduct.equals(product) || dbProduct.equals(product2)));
+        productService.getAllPagedAndSorted().forEach(dbProduct -> Assert.assertTrue(dbProduct.equals(product) || dbProduct.equals(product2)));
     }
 
     @Test
-    public void newProduct() {
+    public void teatNewProduct() {
         Product newProduct = productService.newProduct(new Product("Iphone XI", "Used iphone Brand New", 9.04, 400.99, "United States" ));
 
         Assert.assertTrue(productRepository.findById(newProduct.getId()).isPresent());
@@ -58,7 +57,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void deleteProduct() {
+    public void testDeleteProduct() {
         Product product = productRepository.save(new Product("Iphone X", "Used iphone with some scratches", 8.04, 300.99, "United States" ));
 
         productService.deleteProduct(product.getId());
@@ -68,12 +67,18 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void updateProduct() {
+    public void teatUpdateProduct() {
         Product product = productRepository.save(new Product("Iphone X", "Used iphone with some scratches", 8.04, 300.99, "United States" ));
         product.setPrice(350.00);
         productService.updateProduct(product.getId(), product);
 
         Assert.assertEquals(350.00, productRepository.findById(product.getId()).get().getPrice().doubleValue(), 1e-5);
+    }
 
+    @Test
+    public void testFindByName() {
+        Product product = productRepository.save(new Product("Iphone X", "Used iphone with some scratches", 8.04, 300.99, "United States" ));
+
+        Assert.assertEquals(product, productRepository.findByName("Iphone X").get(0));
     }
 }
