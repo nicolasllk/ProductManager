@@ -4,7 +4,10 @@ import com.product.productManager.domain.model.Product;
 import com.product.productManager.domain.repository.ProductRepository;
 import com.product.productManager.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -17,8 +20,8 @@ public class ProductService {
                 orElseThrow(() -> new ProductNotFoundException("Product id: " + id +" not found."));
     }
 
-    public Iterable<Product> getAll() {
-        return productRepository.findAll();
+    public List<Product> getAll() {
+        return Streamable.of(productRepository.findAll()).toList();
     }
 
     public Product newProduct(Product newProduct) {
