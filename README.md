@@ -62,3 +62,17 @@ Functionality provided:
 --header 'Accept: application/json' \
 --header 'Content-Type: application/json' \
 --data-raw ''`
+
+* Get products by name
+
+`curl --location --request GET 'localhost:8080/product/name/productNameHere' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--data-raw ''`
+
+
+## TODO's
+
+* Configure LiquidBase to manage db changes and init
+* Add rest endpoint documentation with OpenAPI
+* Adding pagination and sorting to findByName endpoint
