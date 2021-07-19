@@ -76,3 +76,4 @@ Functionality provided:
 * Configure LiquidBase to manage db changes and init
 * Add rest endpoint documentation with OpenAPI
 * Adding pagination and sorting to findByName endpoint
+* Not HATEOAS compliant (missing Discoverability)
