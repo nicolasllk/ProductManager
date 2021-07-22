@@ -1,12 +1,14 @@
 package com.product.productManager.domain.repository;
 
 import com.product.productManager.domain.model.Product;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -33,7 +35,7 @@ public class ProductRepositoryPersistenceTest {
 
     @Test
     public void testPersistNewProduct(){
-        Product product = productRepository.save(new Product(null,"Iphone X", "Used iphone with some scratches", 8.04,
+        Product product = productRepository.save(new Product(null, null,"Iphone X", "Used iphone with some scratches", 8.04,
                 300.99, "United States", new Date(), new Date(), "dummyUser", "dummyUser" ));
         Assert.assertNotNull(product);
         Assert.assertEquals("Iphone X", product.getName());
@@ -46,7 +48,7 @@ public class ProductRepositoryPersistenceTest {
 
     @Test
     public void testLoadPersistedProduct(){
-       productRepository.save(new Product(null, "Iphone X", "Used iphone with some scratches", 8.04, 300.99, "United States"
+       productRepository.save(new Product(null, null, "Iphone X", "Used iphone with some scratches", 8.04, 300.99, "United States"
                , new Date(), new Date(), "dummyUser", "dummyUser"));
        Product product = productRepository.findAll().iterator().next();
 
@@ -61,7 +63,7 @@ public class ProductRepositoryPersistenceTest {
 
     @Test
     public void testEditProduct(){
-        productRepository.save(new Product(null, "Iphone X", "Used iphone with some scratches",
+        productRepository.save(new Product(null, null,  "Iphone X", "Used iphone with some scratches",
                 8.04, 300.99, "United States", new Date(), new Date(), "dummyUser", "dummyUser"));
         Product product = productRepository.findAll().iterator().next();
         int entityId = product.getId();
@@ -80,7 +82,7 @@ public class ProductRepositoryPersistenceTest {
 
     @Test
     public void testDeleteProduct(){
-        productRepository.save(new Product(null, "Iphone XI", "Used iphone with some scratches", 8.04, 300.99, "United States"
+        productRepository.save(new Product(null, null, "Iphone XI", "Used iphone with some scratches", 8.04, 300.99, "United States"
                 , new Date(), new Date(), "dummyUser", "dummyUser"));
         AtomicInteger productId = new AtomicInteger();
         productRepository.findAll().forEach(product1 -> {
@@ -91,6 +93,23 @@ public class ProductRepositoryPersistenceTest {
 
         productRepository.deleteById(productId.get());
         Assert.assertFalse(productRepository.findById(productId.get()).isPresent());
+    }
+
+    @Test
+    public void testFindByProductId(){
+        productRepository.save(new Product(null, "Iphone_XI_001", "Iphone XI", "Used iphone with some scratches", 8.04, 300.99, "United States"
+                , new Date(), new Date(), "dummyUser", "dummyUser"));
+
+        Assert.assertTrue(productRepository.findByProductID("Iphone_XI_001").isPresent());
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void testFindByProductIdUniqueViolation(){
+        productRepository.save(new Product(null, "Iphone_XI_001", "Iphone XI", "Used iphone with some scratches", 8.04, 300.99, "United States"
+                , new Date(), new Date(), "dummyUser", "dummyUser"));
+        productRepository.save(new Product(null, "Iphone_XI_001", "Iphone XI GOOD", "Used iphone with some scratches", 9.04, 390.99, "United States"
+                , new Date(), new Date(), "dummyUser", "dummyUser"));
+
     }
 
 }

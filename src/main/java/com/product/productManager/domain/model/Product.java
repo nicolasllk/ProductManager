@@ -2,11 +2,14 @@ package com.product.productManager.domain.model;
 
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
@@ -15,6 +18,10 @@ public class Product {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+
+    @NotNull
+    @Column(unique = true)
+    private String productID;
 
     @NotNull
     @Size(min = 3, max = 50)

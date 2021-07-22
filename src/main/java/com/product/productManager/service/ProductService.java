@@ -10,9 +10,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductService {
 
     @Autowired
@@ -36,8 +39,8 @@ public class ProductService {
         return productRepository.save(newProduct);
     }
 
-    public void deleteProduct(int id) {
-        productRepository.deleteById(id);
+    public void deleteProduct(String id) {
+        productRepository.deleteByProductID(id);
     }
 
     public Product updateProduct(int id, Product newProduct) {
@@ -54,9 +57,12 @@ public class ProductService {
     }
 
     private void updateProduct(Product newProduct, Product updatableProduct) {
+        Date now = new Date();
         updatableProduct.setName(newProduct.getName());
         updatableProduct.setDescription(newProduct.getDescription());
         updatableProduct.setPrice(newProduct.getPrice());
         updatableProduct.setWeight(newProduct.getWeight());
+        updatableProduct.setLastUpdate(now);
+        updatableProduct.setLastModifyBy("UserGottenFromContext");
     }
 }
