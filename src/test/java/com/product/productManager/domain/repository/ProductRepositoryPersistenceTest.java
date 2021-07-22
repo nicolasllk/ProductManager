@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -32,7 +33,8 @@ public class ProductRepositoryPersistenceTest {
 
     @Test
     public void testPersistNewProduct(){
-        Product product = productRepository.save(new Product("Iphone X", "Used iphone with some scratches", 8.04, 300.99, "United States" ));
+        Product product = productRepository.save(new Product(null,"Iphone X", "Used iphone with some scratches", 8.04,
+                300.99, "United States", new Date(), new Date(), "dummyUser", "dummyUser" ));
         Assert.assertNotNull(product);
         Assert.assertEquals("Iphone X", product.getName());
         Assert.assertEquals("Used iphone with some scratches", product.getDescription());
@@ -44,7 +46,8 @@ public class ProductRepositoryPersistenceTest {
 
     @Test
     public void testLoadPersistedProduct(){
-       productRepository.save(new Product("Iphone X", "Used iphone with some scratches", 8.04, 300.99, "United States" ));
+       productRepository.save(new Product(null, "Iphone X", "Used iphone with some scratches", 8.04, 300.99, "United States"
+               , new Date(), new Date(), "dummyUser", "dummyUser"));
        Product product = productRepository.findAll().iterator().next();
 
        Assert.assertNotNull(product);
@@ -58,7 +61,8 @@ public class ProductRepositoryPersistenceTest {
 
     @Test
     public void testEditProduct(){
-        productRepository.save(new Product("Iphone X", "Used iphone with some scratches", 8.04, 300.99, "United States" ));
+        productRepository.save(new Product(null, "Iphone X", "Used iphone with some scratches",
+                8.04, 300.99, "United States", new Date(), new Date(), "dummyUser", "dummyUser"));
         Product product = productRepository.findAll().iterator().next();
         int entityId = product.getId();
         product.setDescription("Good as new");
@@ -76,7 +80,8 @@ public class ProductRepositoryPersistenceTest {
 
     @Test
     public void testDeleteProduct(){
-        productRepository.save(new Product("Iphone XI", "Used iphone with some scratches", 8.04, 300.99, "United States" ));
+        productRepository.save(new Product(null, "Iphone XI", "Used iphone with some scratches", 8.04, 300.99, "United States"
+                , new Date(), new Date(), "dummyUser", "dummyUser"));
         AtomicInteger productId = new AtomicInteger();
         productRepository.findAll().forEach(product1 -> {
             if (product1.getName().equals("Iphone XI")) {
