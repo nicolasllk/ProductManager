@@ -36,7 +36,7 @@ public class ProductServiceTest {
 
     @Test
     public void testGetProduct() {
-        Product product = productRepository.save(new Product(null, "Iphone X", "Used iphone with some scratches", 8.04,
+        Product product = productRepository.save(new Product(null, null, "Iphone X", "Used iphone with some scratches", 8.04,
                 300.99, "United States", new Date(), new Date(), "dummyUser", "dummyUser" ));
 
         Product savedProduct = productService.getProduct(product.getId());
@@ -46,9 +46,9 @@ public class ProductServiceTest {
 
     @Test
     public void teatGetAll() {
-        Product product = productRepository.save(new Product(null, "Iphone X", "Used iphone with some scratches",
+        Product product = productRepository.save(new Product(null, null,"Iphone X", "Used iphone with some scratches",
                 8.04, 300.99, "United States", new Date(), new Date(), "dummyUser", "dummyUser" ));
-        Product product2 = productRepository.save(new Product(null, "Iphone XI", "Used iphone Brand New",
+        Product product2 = productRepository.save(new Product(null, null,"Iphone XI", "Used iphone Brand New",
                 9.04, 400.99, "United States", new Date(), new Date(), "dummyUser", "dummyUser" ));
 
         List<Product> resultSet = productService.getAllPagedAndSorted();
@@ -59,7 +59,7 @@ public class ProductServiceTest {
 
     @Test
     public void teatNewProduct() {
-        Product newProduct = productService.newProduct(new Product(null, "Iphone XI", "Used iphone Brand New", 9.04,
+        Product newProduct = productService.newProduct(new Product(null, null,"Iphone XI", "Used iphone Brand New", 9.04,
                 400.99, "United States", new Date(), new Date(), "dummyUser", "dummyUser" ));
 
         Assert.assertTrue(productRepository.findById(newProduct.getId()).isPresent());
@@ -68,10 +68,10 @@ public class ProductServiceTest {
 
     @Test
     public void testDeleteProduct() {
-        Product product = productRepository.save(new Product(null, "Iphone X", "Used iphone with some scratches",
+        Product product = productRepository.save(new Product(null, null,"Iphone X", "Used iphone with some scratches",
                 8.04, 300.99, "United States", new Date(), new Date(), "dummyUser", "dummyUser" ));
 
-        productService.deleteProduct(product.getId());
+        productService.deleteProduct(product.getProductID());
 
         Assert.assertFalse(productRepository.findById(product.getId()).isPresent());
 
@@ -79,7 +79,7 @@ public class ProductServiceTest {
 
     @Test
     public void teatUpdateProduct() {
-        Product product = productRepository.save(new Product(null, "Iphone X", "Used iphone with some scratches",
+        Product product = productRepository.save(new Product(null, null,"Iphone X", "Used iphone with some scratches",
                 8.04, 300.99, "United States" , new Date(), new Date(), "dummyUser", "dummyUser"));
         product.setPrice(350.00);
         productService.updateProduct(product.getId(), product);
@@ -89,7 +89,7 @@ public class ProductServiceTest {
 
     @Test
     public void testFindByName() {
-        Product product = productRepository.save(new Product(null,"Iphone X", "Used iphone with some scratches",
+        Product product = productRepository.save(new Product(null,null,"Iphone X", "Used iphone with some scratches",
                 8.04, 300.99, "United States", new Date(), new Date(), "dummyUser", "dummyUser" ));
 
         Assert.assertEquals(product, productRepository.findByName("Iphone X").get(0));
